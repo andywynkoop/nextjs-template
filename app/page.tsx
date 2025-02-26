@@ -1,4 +1,10 @@
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Andy Wynkoop",
+  description: "andy Wynkoop's Next.js Project",
+};
 
 export default function Home() {
   return (
