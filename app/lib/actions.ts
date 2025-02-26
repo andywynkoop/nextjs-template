@@ -43,7 +43,7 @@ export async function authenticate(
 }
 
 export async function signUp(prevState: SignUpState, formData: FormData) {
-  const validatedFields = SignUpFormSchema.safeParse({
+  const validatedFields = SignUp.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),

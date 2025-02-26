@@ -6,16 +6,6 @@ import Link from "next/link";
 export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
-    // Handle signup logic here
-  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6">
@@ -25,7 +15,7 @@ export default function SignUpPage() {
             Log in to your account
           </h2>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6">
           <div className="space-y-4 rounded-md shadow-sm">
             <div>
               <label htmlFor="email" className="sr-only">
@@ -72,7 +62,7 @@ export default function SignUpPage() {
         </form>
 
         <p className="mt-2 text-center text-sm text-gray-600">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             href="/signup"
             className="font-medium text-blue-500 hover:text-blue-600"
