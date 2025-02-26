@@ -65,12 +65,6 @@ export async function signUp(
       errors: { confirmPassword: ["Passwords do not match"] },
     };
   }
-  const user = await sql`SELECT * FROM users WHERE email=${email}`;
-  if (user.length > 0) {
-    return {
-      errors: { email: ["Email already exists"] },
-    };
-  }
   const hashedPassword = await bcrypt.hash(password, 10);
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
   await sql`
@@ -80,6 +74,12 @@ export async function signUp(
       password TEXT NOT NULL
     );
   `;
+  const user = await sql`SELECT * FROM users WHERE email=${email}`;
+  if (user.length > 0) {
+    return {
+      errors: { email: ["Email already exists"] },
+    };
+  }
   await sql`
     INSERT INTO users (email, password)
     VALUES (${email}, ${hashedPassword})
