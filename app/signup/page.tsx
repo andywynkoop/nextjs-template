@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Metadata } from "next";
 import SignUpForm from "./signup-form";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Sign Up",
@@ -16,7 +17,9 @@ export default function SignUpPage() {
             Create your account
           </h2>
         </div>
-        <SignUpForm />
+        <Suspense>
+          <SignUpForm />
+        </Suspense>
 
         <p className="mt-2 text-center text-sm text-gray-600">
           Already have an account?{" "}

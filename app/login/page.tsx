@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Metadata } from "next";
 import LoginForm from "./login-form";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -16,7 +17,9 @@ export default function SignUpPage() {
             Log in to your account
           </h2>
         </div>
-        <LoginForm />
+        <Suspense>
+          <LoginForm />
+        </Suspense>
 
         <p className="mt-2 text-center text-sm text-gray-600">
           Don&apos;t have an account?{" "}
