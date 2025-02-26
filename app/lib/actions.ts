@@ -1,8 +1,10 @@
+"use server";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { z } from "zod";
 import bcrypt from "bcrypt";
 import postgres from "postgres";
+import { redirect } from "next/navigation";
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
 const SignUpFormSchema = z.object({
@@ -42,7 +44,11 @@ export async function authenticate(
   }
 }
 
-export async function signUp(prevState: SignUpState, formData: FormData) {
+export async function signUp(
+  prevState: SignUpState,
+  formData: FormData
+): Promise<SignUpState> {
+  console.log("formData", formData);
   const validatedFields = SignUp.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -60,12 +66,17 @@ export async function signUp(prevState: SignUpState, formData: FormData) {
       errors: { passwordsMatch: ["Passwords do not match"] },
     };
   }
+  const user = await sql`SELECT * FROM users WHERE email=${email}`;
+  if (user.length > 0) {
+    return {
+      errors: { email: ["Email already exists"] },
+    };
+  }
   const hashedPassword = await bcrypt.hash(password, 10);
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;
   await sql`
     CREATE TABLE IF NOT EXISTS users (
       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-      name VARCHAR(255) NOT NULL,
       email TEXT NOT NULL UNIQUE,
       password TEXT NOT NULL
     );
@@ -75,6 +86,11 @@ export async function signUp(prevState: SignUpState, formData: FormData) {
     VALUES (${email}, ${hashedPassword})
     ON CONFLICT (id) DO NOTHING;
   `;
-  await signIn("credentials", { email, password });
-  return { message: "User created successfully" };
+  await signIn("credentials", {
+    email,
+    password,
+    redirect: false, // Prevent next-auth's default redirect
+  });
+  const redirectTo = (formData.get("redirectTo") as string) || "/dashboard";
+  redirect(redirectTo);
 }
