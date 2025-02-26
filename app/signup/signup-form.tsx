@@ -73,15 +73,12 @@ export default function SignUpForm() {
             placeholder="Confirm Password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            aria-invalid={
-              !!state.errors?.confirmPassword || !!state.errors?.passwordsMatch
-            }
+            aria-invalid={!!state.errors?.confirmPassword}
             aria-describedby="confirm-password-error"
           />
-          {(state.errors?.confirmPassword || state.errors?.passwordsMatch) && (
+          {state.errors?.confirmPassword && (
             <div id="confirm-password-error" className="text-red-500">
               <p>{state.errors.confirmPassword}</p>
-              <p>{state.errors.passwordsMatch}</p>
             </div>
           )}
         </div>

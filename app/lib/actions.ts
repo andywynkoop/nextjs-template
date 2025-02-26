@@ -20,7 +20,6 @@ export type SignUpState = {
     email?: string[];
     password?: string[];
     confirmPassword?: string[];
-    passwordsMatch?: string[];
   };
   message?: string | null;
 };
@@ -63,7 +62,7 @@ export async function signUp(
   const { email, password, confirmPassword } = validatedFields.data;
   if (password !== confirmPassword) {
     return {
-      errors: { passwordsMatch: ["Passwords do not match"] },
+      errors: { confirmPassword: ["Passwords do not match"] },
     };
   }
   const user = await sql`SELECT * FROM users WHERE email=${email}`;
